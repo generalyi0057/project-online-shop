@@ -1,56 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import Spinner from 'react-bootstrap/Spinner';
+import './App.sass';
+
+import NavigationBar from "./components/NavigationBar";
+const Main = lazy(() => import("./components/Main"));
+const SignIn = lazy(() => import("./components/SignIn"));
+const SignUp = lazy(() => import("./components/SignUp"));
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <Router>
+        <NavigationBar />
+        <Suspense fallback={
+          <div className="mt-4 text-center">
+            <Spinner animation="border" variant="primary role='status'">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </div>
+        }>
+          <Routes>
+            <Route path="/" element={<Main />}/>
+            <Route path="/sign-in" element={<SignIn />}/>
+            <Route path="/sign-up" element={<SignUp />}/>
+          </Routes>
+        </Suspense>
+      </Router>
     </div>
   );
 }
